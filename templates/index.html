@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask File Uploader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        ::-webkit-file-upload-button {
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #fff!important;
+            background-color: #212529!important;
+            border-color: #212529!important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-3">
+        <h1 class="text-center">Flask File Uploader</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="my-3">
+                <label for="files">Upload Files</label>
+                <input type="file" class="form-control my-3" name="files" id="files" accept="application/pdf" multiple>
+            </div>
+            <button type="submit" class="btn btn-outline-dark btn-sm">Upload &uparrow;</button>
+        </form>
+        <hr>
+
+        {% if files %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center">FileName</th>
+                    <th class="text-center">FileUrl</th>
+                    <th class="text-center">Type</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(0, files|length) %}
+                <tr>
+                    <th class="text-center">{{i+1}}</th>
+                    <th class="text-center">{{files[i].filename}}</th>
+                    <th class="text-center"><a href="{{request.url}}{{files[i].fileurl}}" target="_blank">{{files[i].fileurl|truncate(50)}}</a></th>
+                    <th class="text-center">{{files[i].filetype}}</th>
+                    <th class="text-center">
+                        <a href="{{request.url}}{{files[i].fileurl}}" class="btn btn-sm btn-success" target="_blank" download="{{files[i].filename}}">Download</a>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-secondary">
+            <p class="mb-0 text-center">No files uploaded yet...</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+</html>
